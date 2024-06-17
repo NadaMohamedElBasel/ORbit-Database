@@ -1,0 +1,160 @@
+*{
+    padding: 0px;  
+    margin: 0px;
+}
+body { 
+    font-family: Arial, Helvetica, sans-serif;
+    height: 700px;
+}
+/* Navigation Bar Styles */
+.navbar {
+    background-color: hsl(216, 71%, 99%); /* Dark background color */
+    padding: 15px 0;
+    border-bottom: 1px solid #fdf5f5; /* Dark border bottom */
+}
+
+.navbar-brand {
+    font-size: 28px;
+    font-weight: bold;
+}
+.navbar-nav {
+    list-style: none; 
+    padding-left: 0; 
+}
+
+.navbar-nav .nav-link {
+    font-size: 16px;
+    padding: 10px 20px;
+    color: #fff; /* White text color */
+    transition: color 0.3s ease;
+}
+
+.navbar-nav .nav-link:hover {
+    color: #070c0b; /* Hover color */
+}
+
+.navbar-toggler {
+    border: none;
+    color: #fff;
+}
+
+.navbar-toggler-icon {
+    background-color: #fff;
+}
+
+@media (max-width: 991.98px) {
+    .navbar-nav .nav-link {
+        font-size: 14px;
+        padding: 8px 15px;
+    }
+}
+ 
+.slider {
+    margin-top: 0px;
+    width: 100%;
+}
+.container{
+    overflow: hidden;
+    width: 100%;
+    background-color: #4c76af;
+    margin: auto;
+}
+.A {
+    font-family: 'Brush Script MT', cursive;
+    font-style: italic;
+    font-size: 45px;
+    color: white;
+    text-align: center; 
+}
+.C {
+    font-size: 15px;
+    color: white;
+    text-align: center;
+    padding-left: 100px;
+    padding-right: 100px; 
+}
+.carousel-caption h1 {
+    color: #365d95;
+}
+/* Footer Styles */
+footer {
+    background-color: #fff;
+    color: #fff; /* Set text color to white */
+    padding: 30px 0;
+    margin-top: 50px;
+}
+
+footer h4 {
+    color: #fff; /* Set heading color to white */
+    font-size: 18px;
+    margin-bottom: 20px;
+}
+
+footer p {
+    color: #fff; /* Set paragraph text color to white */
+    font-size: 14px;
+    margin-bottom: 10px;
+}
+
+.social-icons {
+    margin-top: 10px;
+}
+
+.social-icon {
+    color: #fff; /* Set social icon color to white */
+    font-size: 24px;
+    margin-right: 10px;
+    transition: color 0.3s ease;
+}
+
+.social-icon:hover {
+    color: #1abc9c; /* Change color on hover */
+}
+
+footer p.copyright {
+    margin-top: 20px;
+    font-size: 14px;
+}
+
+@media (max-width: 767px) {
+    footer {
+        text-align: center;
+    }
+    .social-icons {
+        margin-top: 20px;
+    }
+    .social-icon {
+        font-size: 20px;
+    }
+}
+/* Styling for Welcome Section */
+.welcome-section {
+    background-color: #f8f9fa; /* Light gray background */
+    padding: 40px;
+    margin-bottom: 30px;
+    border-radius: 8px;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.1); /* Soft shadow effect */
+}
+
+.welcome-section h2 {
+    font-size: 32px;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.welcome-section .highlight {
+    color: #0b0e0d; /* Highlight color */
+}
+
+.welcome-section p {
+    font-size: 18px;
+    line-height: 1.6;
+}
+
+@media (max-width: 767px) {
+    .welcome-section {
+        padding: 20px;
+    }
+}
+
+
