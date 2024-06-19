@@ -108,16 +108,16 @@
   </style>
 </head>
 <body>
-  <div class="container">
-    <h2>Login</h2>
-    <form action="http://localhost:5000/validation" method="POST">
-      <input type="text" placeholder="Enter Email" name="email" required>
-      <input type="password" name="password" placeholder="Password" required>
-      <input type="submit" value="Login" onclick="location.href = '/home';">
-    </form>
-    <div class="message">
-      <p>Don't have an account? <a href="http://localhost:5000/signup">Sign up</a></p>
+    <div class="container">
+      <h2>Login</h2>
+      <form action="{{ url_for('login') }}" method="POST">
+        <input type="text" placeholder="Enter Email" name="email" required>
+        <input type="password" name="password" placeholder="Password" required>
+        <input type="submit" value="Login">
+      </form>
+      <div class="message">
+        <p>Don't have an account? <a href="{{ url_for('signup') }}">Sign up</a></p>
+      </div>
     </div>
-  </div>
-</body>
+  </body>
 </html>
