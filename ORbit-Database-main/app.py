@@ -28,23 +28,19 @@ def login():
     if request.method == 'POST':
         username = request.form['email']
         password = request.form['password']
-        mycursor.execute("SELECT email FROM users")
-        usernames = [x[0] for x in mycursor]
-        myresult = mycursor.fetchall()
-        if username in usernames:
-            mycursor.execute(f"SELECT password FROM users WHERE email = '{username}'")
-            passwords = [x[0] for x in mycursor]
-            pass_valid = mycursor.fetchall()
-            if password in passwords:
-                session['username'] = username
-                return redirect(url_for('home'))
-            else:
-                flash('Invalid password! Please try again.', 'error')
-                return render_template('login.html')
+        
+        # Query for user with given email and password
+        mycursor.execute("SELECT email, password FROM users WHERE email = %s AND password = %s", (username, password,))
+        user = mycursor.fetchone()
+        if user:
+            session['username'] = username
+            return redirect(url_for('home'))
         else:
-            flash('Username not found! Please sign up.', 'error')
+            flash('Invalid email or password! Please try again.', 'error')
             return render_template('login.html')
+    
     return render_template('login.html')
+
 
 # Route for logout
 @app.route('/logout')
@@ -59,7 +55,6 @@ def signup():
     if request.method == 'POST':
         email = request.form['email']
         password = request.form['psw']
-        confirm_password = request.form['psw-repeat']
         
         # Check if the email already exists in the database
         mycursor.execute("SELECT email FROM users WHERE email = %s", (email,))
@@ -69,8 +64,8 @@ def signup():
             return render_template('signup.html')
         
         # Insert new user into database
-        sql = "INSERT INTO users (email, password, confirm_password) VALUES (%s, %s, %s)"
-        val = (email, password, confirm_password)
+        sql = "INSERT INTO users (email, password) VALUES (%s, %s)"
+        val = (email, password)
         mycursor.execute(sql, val)
         mydb.commit()
         
@@ -78,6 +73,7 @@ def signup():
         return redirect(url_for('login'))
     
     return render_template('signup.html')
+
 
 @app.route('/equipment')
 def equipment():
