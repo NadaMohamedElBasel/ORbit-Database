@@ -18,7 +18,7 @@
         }
 
         header {
-            background-color: #4CAF50;
+            background-color: #89CFF0;
             color: white;
             padding: 1em 0;
             text-align: center;
@@ -31,6 +31,7 @@
         nav ul {
             list-style-type: none;
             padding: 0;
+            text-align: center;
         }
 
         nav ul li {
@@ -65,15 +66,21 @@
             margin: 10px;
             padding: 20px;
             text-align: center;
-            width: 200px;
+            width: 45%;
         }
 
         .card h3 {
             margin: 0;
         }
 
+        .chart-container {
+            width: 100%;
+            height: 300px;
+            margin: 0 auto;
+        }
+
         footer {
-            background-color: #4CAF50;
+            background-color: #89CFF0;
             color: white;
             text-align: center;
             padding: 10px 0;
@@ -82,10 +89,141 @@
             width: 100%;
         }
     </style>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             console.log('Dashboard loaded');
-            // Add your JavaScript code here
+
+            // Equipment Chart
+            var ctx = document.getElementById('equipmentChart').getContext('2d');
+            var equipmentChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: ['X-Ray', 'MRI', 'CT Scan', 'Ultrasound', 'Ventilator'],
+                    datasets: [{
+                        label: '# of Equipment',
+                        data: [12, 19, 3, 5, 2],
+                        backgroundColor: 'rgba(137, 207, 240, 0.2)',
+                        borderColor: 'rgba(137, 207, 240, 1)',
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    }
+                }
+            });
+
+            // Doctors Chart
+            var ctx2 = document.getElementById('doctorsChart').getContext('2d');
+            var doctorsChart = new Chart(ctx2, {
+                type: 'pie',
+                data: {
+                    labels: ['Cardiology', 'Neurology', 'Orthopedics', 'Pediatrics', 'General'],
+                    datasets: [{
+                        label: '# of Doctors',
+                        data: [10, 7, 5, 8, 6],
+                        backgroundColor: [
+                            'rgba(255, 99, 132, 0.2)',
+                            'rgba(54, 162, 235, 0.2)',
+                            'rgba(255, 206, 86, 0.2)',
+                            'rgba(75, 192, 192, 0.2)',
+                            'rgba(153, 102, 255, 0.2)'
+                        ],
+                        borderColor: [
+                            'rgba(255, 99, 132, 1)',
+                            'rgba(54, 162, 235, 1)',
+                            'rgba(255, 206, 86, 1)',
+                            'rgba(75, 192, 192, 1)',
+                            'rgba(153, 102, 255, 1)'
+                        ],
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                }
+            });
+
+            // Patients Chart
+            var ctx3 = document.getElementById('patientsChart').getContext('2d');
+            var patientsChart = new Chart(ctx3, {
+                type: 'line',
+                data: {
+                    labels: ['January', 'February', 'March', 'April', 'May', 'June'],
+                    datasets: [{
+                        label: '# of Patients',
+                        data: [65, 59, 80, 81, 56, 55],
+                        backgroundColor: 'rgba(153, 102, 255, 0.2)',
+                        borderColor: 'rgba(153, 102, 255, 1)',
+                        borderWidth: 1,
+                        fill: true,
+                    }]
+                },
+                options: {
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    }
+                }
+            });
+
+            // Operation Rooms Chart
+            var ctx4 = document.getElementById('opRoomsChart').getContext('2d');
+            var opRoomsChart = new Chart(ctx4, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Room 1', 'Room 2', 'Room 3', 'Room 4'],
+                    datasets: [{
+                        label: '# of Operations',
+                        data: [10, 20, 30, 40],
+                        backgroundColor: [
+                            'rgba(255, 99, 132, 0.2)',
+                            'rgba(54, 162, 235, 0.2)',
+                            'rgba(255, 206, 86, 0.2)',
+                            'rgba(75, 192, 192, 0.2)'
+                        ],
+                        borderColor: [
+                            'rgba(255, 99, 132, 1)',
+                            'rgba(54, 162, 235, 1)',
+                            'rgba(255, 206, 86, 1)',
+                            'rgba(75, 192, 192, 1)'
+                        ],
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                }
+            });
+
+            // Beds Availability Chart
+            var ctx5 = document.getElementById('bedsChart').getContext('2d');
+            var bedsChart = new Chart(ctx5, {
+                type: 'horizontalBar',
+                data: {
+                    labels: ['General Ward', 'ICU', 'Pediatrics', 'Maternity'],
+                    datasets: [{
+                        label: '# of Beds Available',
+                        data: [50, 20, 30, 40],
+                        backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                        borderColor: 'rgba(75, 192, 192, 1)',
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    scales: {
+                        x: {
+                            beginAtZero: true
+                        }
+                    }
+                }
+            });
+
         });
     </script>
 </head>
@@ -110,26 +248,48 @@
                 <div class="cards">
                     <div class="card">
                         <h3>Equipment</h3>
-                        <p>Details about equipment</p>
+                        <div class="chart-container">
+                            <canvas id="equipmentChart"></canvas>
+                        </div>
                     </div>
                     <div class="card">
                         <h3>Doctors</h3>
-                        <p>Details about doctors</p>
+                        <div class="chart-container">
+                            <canvas id="doctorsChart"></canvas>
+                        </div>
                     </div>
+                </div>
+                <div class="cards">
                     <div class="card">
                         <h3>Patients</h3>
-                        <p>Details about patients</p>
+                        <div class="chart-container">
+                            <canvas id="patientsChart"></canvas>
+                        </div>
                     </div>
                     <div class="card">
                         <h3>Operation Rooms</h3>
-                        <p>Details about operation rooms</p>
+                        <div class="chart-container">
+                            <canvas id="opRoomsChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+                <div class="cards">
+                    <div class="card">
+                        <h3>Beds Availability</h3>
+                        <div class="chart-container">
+                            <canvas id="bedsChart"></canvas>
+                        </div>
                     </div>
                 </div>
             </section>
         </main>
         <footer>
-            <p>&copy; 2023 ORbit. All rights reserved.</p>
+            <p>&copy; 2024 ORbit. All rights reserved.</p>
         </footer>
     </div>
 </body>
 </html>
+
+
+     
+                
