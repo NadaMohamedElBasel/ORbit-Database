@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -90,6 +91,63 @@
             border-radius: 5px;
             margin-top: 20px;
         }
+        @media (max-width: 768px) {
+    .navbar {
+        height: auto;
+    }
+
+    .navbar .Logo a {
+        padding-left: 20px;
+        font-size: 35px;
+    }
+
+    .navbar a {
+        float: none;
+        display: block;
+        text-align: left;
+        padding: 15px;
+    }
+
+    footer {
+        top: 30px;
+    }
+
+    .container {
+        margin: 20px 5%;
+        padding: 10px;
+    }
+}
+
+/* Adjustments for mobile phones (max-width: 480px) */
+@media (max-width: 480px) {
+    .navbar .Logo a {
+        padding-left: 10px;
+        font-size: 25px;
+    }
+
+    .navbar a {
+        padding: 10px;
+        font-size: 14px;
+    }
+
+    footer {
+        top: 30px;
+    }
+
+    footer h4 {
+        font-size: 12px;
+    }
+
+    footer .row {
+        height: auto;
+        padding: 5px;
+    }
+
+    .container {
+        margin: 10px 2%;
+        padding: 10px;
+    }
+}
     </style>
 </head>
 <body>
