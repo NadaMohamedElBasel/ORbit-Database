@@ -9,7 +9,7 @@ mydb = mysql.connector.connect(
     host="localhost",
     user="root",
     passwd="0000",
-    database="ORbit"  # Ensure this matches your database name
+    database="ORbit"  
 )
 mycursor = mydb.cursor()
 
@@ -41,12 +41,10 @@ def login():
     
     return render_template('login.html')
 
-
 # Route for logout
 @app.route('/logout')
 def logout():
     session.pop('username', None)
-    flash('You have been logged out.', 'info')
     return redirect(url_for('login'))
 
 # Route for signup page
@@ -55,41 +53,46 @@ def signup():
     if request.method == 'POST':
         email = request.form['email']
         password = request.form['psw']
+        password_repeat = request.form['psw-repeat']
         
         # Check if the email already exists in the database
         mycursor.execute("SELECT email FROM users WHERE email = %s", (email,))
         result = mycursor.fetchone()
         if result:
             flash('Email already exists! Please use a different email.', 'error')
-            return render_template('signup.html')
+            return render_template('signup.html', email=email)  # Pass email to keep it in the form
         
-        # Insert new user into database
-        sql = "INSERT INTO users (email, password) VALUES (%s, %s)"
-        val = (email, password)
+        # Check if passwords match
+        if password != password_repeat:
+            flash('Passwords do not match! Please try again.', 'error')
+            return render_template('signup.html', email=email, password=password)  # Pass email and password to keep them in the form
+        
+        # Insert new user into database including confirm_password
+        sql = "INSERT INTO users (email, password, confirm_password) VALUES (%s, %s, %s)"
+        val = (email, password, password_repeat)
         mycursor.execute(sql, val)
         mydb.commit()
         
-        flash('Signup successful! Please login.', 'success')
         return redirect(url_for('login'))
     
-    return render_template('signup.html')
-
+    # Render the signup form with empty fields initially
+    return render_template('signup.html', email='', password='')  # Pass empty email and password to the template
 
 @app.route('/equipment')
 def equipment():
-    return render_template('equipment.html',pagetitle="Equipment")
+    return render_template('equipment.html', pagetitle="Equipment")
 
 @app.route('/doctors')
 def doctors():
-   return render_template('doctors.html',pagetitle="Docotrs")
+   return render_template('doctors.html', pagetitle="Doctors")
 
 @app.route('/patient')
 def patient():
-   return render_template('patient.html',pagetitle="Patient")
+   return render_template('patient.html', pagetitle="Patient")
 
 @app.route('/oproom')
 def oproom():
-   return render_template('oproom.html')
+   return render_template('oproom.html', pagetitle="Operation Room")
    
 # Error handling for 404
 @app.errorhandler(404)
