@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+
+        .container {
+            width: 100%;
+            margin: 0 auto;
+        }
+
+        header {
+            background-color: #4CAF50;
+            color: white;
+            padding: 1em 0;
+            text-align: center;
+        }
+
+        header h1 {
+            margin: 0;
+        }
+
+        nav ul {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        nav ul li {
+            display: inline;
+            margin: 0 10px;
+        }
+
+        nav ul li a {
+            color: white;
+            text-decoration: none;
+        }
+
+        main {
+            padding: 20px;
+        }
+
+        .dashboard-section {
+            margin: 20px 0;
+        }
+
+        .cards {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-around;
+        }
+
+        .card {
+            background-color: white;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            margin: 10px;
+            padding: 20px;
+            text-align: center;
+            width: 200px;
+        }
+
+        .card h3 {
+            margin: 0;
+        }
+
+        footer {
+            background-color: #4CAF50;
+            color: white;
+            text-align: center;
+            padding: 10px 0;
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+        }
+    </style>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('Dashboard loaded');
+            // Add your JavaScript code here
+        });
+    </script>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Welcome to the Dashboard</h1>
+            <nav>
+                <ul>
+                    <li><a href="/home">Home</a></li>
+                    <li><a href="/equipment">Equipment</a></li>
+                    <li><a href="/doctors">Doctors</a></li>
+                    <li><a href="/patient">Patient</a></li>
+                    <li><a href="/oproom">Operation Room</a></li>
+                    <li><a href="/logout">Logout</a></li>
+                </ul>
+            </nav>
+        </header>
+        <main>
+            <section class="dashboard-section">
+                <h2>Overview</h2>
+                <div class="cards">
+                    <div class="card">
+                        <h3>Equipment</h3>
+                        <p>Details about equipment</p>
+                    </div>
+                    <div class="card">
+                        <h3>Doctors</h3>
+                        <p>Details about doctors</p>
+                    </div>
+                    <div class="card">
+                        <h3>Patients</h3>
+                        <p>Details about patients</p>
+                    </div>
+                    <div class="card">
+                        <h3>Operation Rooms</h3>
+                        <p>Details about operation rooms</p>
+                    </div>
+                </div>
+            </section>
+        </main>
+        <footer>
+            <p>&copy; 2023 ORbit. All rights reserved.</p>
+        </footer>
+    </div>
+</body>
+</html>
