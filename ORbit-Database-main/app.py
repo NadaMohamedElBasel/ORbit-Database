@@ -84,7 +84,87 @@ def equipment():
 
 @app.route('/doctors')
 def doctors():
-   return render_template('doctors.html', pagetitle="Doctors")
+   #3ayez aselect eldata w ab3atha w azherha betareea kwayesaa
+   mycursor.execute("SELECT * FROM doctor")
+   row_headers=[x[0] for x in mycursor.description] 
+   myresult = mycursor.fetchall()
+   data={
+         'message':"data retrieved",
+         'rec':myresult,
+          'header':row_headers}
+   
+   return render_template('doctors.html',data=myresult,pagetitle="Docotrs")
+#3mlt var dtata 3lashan ab3tha ll doctor
+
+@app.route('/search_doctor', methods=['GET', 'POST'])
+def search_doctor():
+    if request.method == 'POST':
+        keyword = request.form['search']
+        # Perform the search query using the keyword
+        mycursor.execute("SELECT * FROM doctor WHERE id LIKE %s", ('%' + keyword + '%',))
+        
+        row_headers = [x[0] for x in mycursor.description]
+        myresult = mycursor.fetchall()
+        if len(myresult) > 0:
+         data = {
+               'message': "Data retrieved",
+               'rec': myresult,
+               'header': row_headers
+         }
+         return render_template('doctors.html', data=myresult, keyword=keyword, header=row_headers,pagetitle="Doctor")
+        else:
+            error_message = "ID not found. Please enter a valid ID."
+            return (error_message)
+    else:
+        # Render the server template without search results
+        return render_template('doctors.html',pagetitle="Doctors")
+
+@app.route('/deletedoc', methods = ['POST', 'GET'])
+def delete_doc():
+   if request.method=="POST":
+      # Retrieve the ID from the form data
+      id = request.form['delete']
+
+      # Create a cursor to interact with the database
+      
+
+      # try:
+      #    # Execute the delete query
+      delete_query = "DELETE FROM doctor WHERE id = %s"
+      try:
+         mycursor.execute(delete_query,(id,))
+         mydb.commit()
+         if mycursor.rowcount > 0:
+            return render_template('home.html',pagetitle="Doctors")
+         else:
+            return "ID not found. Please enter a valid ID."
+      # except:
+      #    # Handle the case where the delete operation fails
+      except Exception as e:
+         mydb.rollback()
+         return "Failed to delete record. Error: " + str(e)
+   else:
+      return render_template('home.html',pagetitle="Doctors")
+
+@app.route('/adddoc',methods = ['POST', 'GET'])
+def adddoc():
+   if request.method == 'POST':
+      fn = request.form['firstname']
+      mn=request.form['midname']
+      ln = request.form['lastname']
+      # id = request.form['ID']
+      ssn = request.form['SSN']
+      tit = request.form['title']
+      spec = request.form['specialization']
+      bdate = request.form['Dbdate']
+      print(fn,mn, ln, ssn, tit, spec, bdate)
+      sql = "INSERT INTO doctor (fname ,mname ,lname ,ssn ,title ,specialization ,B_date) VALUES (%s, %s, %s, %s, %s, %s, %s)"
+      val = (fn,mn, ln, ssn, tit, spec, bdate)
+      mycursor.execute(sql, val)
+      mydb.commit()   
+      return render_template('home.html',pagetitle="Home Page")
+   else:
+      return render_template('adddoc.html',pagetitle="Add Doctor")
 
 @app.route('/patient')
 def patient():
