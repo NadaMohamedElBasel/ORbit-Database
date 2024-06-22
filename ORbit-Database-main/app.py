@@ -238,8 +238,72 @@ def adddoc():
 
 @app.route('/patient')
 def patient():
-   return render_template('patient.html', pagetitle="Patient")
+   mycursor.execute("SELECT * FROM patient")
+   row_headers=[x[0] for x in mycursor.description] 
+   myresult = mycursor.fetchall()
+   data={
+         'message':"data retrieved",
+         'rec':myresult,
+          'header':row_headers}
+   return render_template('patient.html', data=myresult,pagetitle="Patient")
 
+@app.route('/search_patient', methods=['GET', 'POST'])
+def search_patient():
+    if request.method == 'POST':
+        keyword = request.form['search']
+        mycursor.execute("SELECT * FROM patient WHERE id LIKE %s", ('%' + keyword + '%',))
+        
+        row_headers = [x[0] for x in mycursor.description]
+        myresult = mycursor.fetchall()
+        if len(myresult) > 0:
+         data = {
+               'message': "Data retrieved",
+               'rec': myresult,
+               'header': row_headers
+         }
+         return render_template('patient.html', data=myresult, keyword=keyword, header=row_headers,pagetitle="Patient")
+        else:
+               error_message = "ID not found. Please enter a valid ID."
+               return (error_message)
+    else:
+        return render_template('patient.html',pagetitle="Patient")
+
+@app.route('/delpatient', methods = ['POST', 'GET'])
+def delete_patient():
+   if request.method=="POST":
+      id = request.form['delete']
+      delete_query = "DELETE FROM patient WHERE id = %s"
+      try:
+         mycursor.execute(delete_query,(id,))
+         mydb.commit()
+         if mycursor.rowcount > 0:
+            return render_template('home.html',pagetitle="Patient")
+         else:
+            return "ID not found. Please enter a valid ID."
+      except Exception as e:
+         mydb.rollback()
+         return "Failed to delete record. Error: " + str(e)
+   else:
+      return render_template('patient.html',pagetitle="Patient")
+
+@app.route('/addpat',methods = ['POST', 'GET'])
+def addpat():
+   if request.method == 'POST':
+      fn = request.form['firstname']
+      ln = request.form['lastname']
+      pl = request.form['lastname']
+      ssn = request.form['SSN']
+      sex = request.form['sex']
+      ph = request.form['phone']
+      pbdate = request.form['Pbdate']
+      print(fn,ssn)  
+      sql = "INSERT INTO patient (fname ,mname ,lname,ssn ,sex ,phone,B_date ) VALUES ( %s, %s, %s, %s, %s, %s, %s)"
+      val = (fn, ln,pl, ssn, sex,ph, pbdate)
+      mycursor.execute(sql, val)
+      mydb.commit()
+      return render_template('home.html',pagetitle="Home Page")
+   else:
+      return render_template('addpat.html',pagetitle="Add Patient")
 @app.route('/oproom')
 def oproom():
    mycursor.execute("SELECT * FROM operating_room")
