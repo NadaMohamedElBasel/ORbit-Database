@@ -80,7 +80,77 @@ def signup():
 
 @app.route('/equipment')
 def equipment():
-    return render_template('equipment.html', pagetitle="Equipment")
+    mycursor.execute("SELECT * FROM equipments")
+    row_headers=[x[0] for x in mycursor.description] 
+    myresult = mycursor.fetchall()
+    data={
+         'message':"data retrieved",
+         'rec':myresult,
+          'header':row_headers}
+    return render_template('equipment.html',data=myresult,pagetitle="Equipment")
+
+@app.route('/search_equipment', methods=['GET', 'POST'])
+def search_equipment():
+    if request.method == 'POST':
+        keyword = request.form['search']
+        # Perform the search query using the keyword
+        mycursor.execute("SELECT * FROM equipments WHERE id_code LIKE %s", ('%' + keyword + '%',))
+        
+        row_headers = [x[0] for x in mycursor.description]
+        myresult = mycursor.fetchall()
+        if len(myresult) > 0:
+         data = {
+               'message': "Data retrieved",
+               'rec': myresult,
+               'header': row_headers
+         }
+         return render_template('equipment.html', data=myresult, keyword=keyword, header=row_headers,pagetitle="Equipment")
+        else:
+            error_message = "ID not found. Please enter a valid ID."
+            return (error_message)
+    else:
+        # Render the server template without search results
+        return render_template('equipment.html',pagetitle="Equipment")
+
+@app.route('/delequip', methods = ['POST', 'GET'])
+def delete_eq():
+   if request.method=="POST":
+      id = request.form['delete']
+      delete_query = "DELETE FROM equipments WHERE id_code = %s"
+      try:
+         mycursor.execute(delete_query,(id,))
+         mydb.commit()
+         if mycursor.rowcount > 0:
+            return render_template('home.html',pagetitle="Equipment")
+         else:
+            return "ID not found. Please enter a valid ID."
+      except Exception as e:
+         mydb.rollback()
+         return "Failed to delete record. Error: " + str(e)
+   else:
+      return render_template('doctors.html',pagetitle="Doctors")
+
+@app.route('/addequip',methods = ['POST', 'GET'])
+def addequip():
+   if request.method == 'POST':
+      name = request.form['name']
+      # id = request.form['ID']
+      supp = request.form['supplier']   
+      quant=request.form['quantity']
+      pur = request.form['purchasedate']
+      warr = request.form['warranty']
+      main = request.form['maintanance']
+      modelno = request.form['modelno']
+      roomno = request.form['roomnum']
+      print(name,id )
+      sql = "INSERT INTO equipments (name ,supplier ,quantity,purchasedate ,warranty ,maintenance ,model_number,room_no  ) VALUES (%s, %s, %s, %s, %s, %s, %s ,%s)"
+      val = (name, supp,quant,pur, warr, main,modelno, roomno)
+      mycursor.execute(sql, val)
+      mydb.commit()
+           
+      return render_template('home.html',pagetitle="Home Page")
+   else:
+      return render_template('addequip.html',pagetitle="Add Equipment")
 
 @app.route('/doctors')
 def doctors():
