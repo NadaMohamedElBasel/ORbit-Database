@@ -172,7 +172,30 @@ def patient():
 
 @app.route('/oproom')
 def oproom():
-   return render_template('oproom.html', pagetitle="Operation Room")
+   mycursor.execute("SELECT * FROM operating_room")
+   myresult = mycursor.fetchall()
+   return render_template('oproom.html', data=myresult)
+   # return render_template('oproom.html')
+
+@app.route('/search_operatingroom', methods=['GET', 'POST'])
+def search_operatingroom():
+    if request.method == 'POST':
+        keyword = request.form['search']
+        # Perform the search query using the keyword
+        mycursor.execute("SELECT * FROM operating_room WHERE room_no LIKE %s", ('%' + keyword + '%',))
+        
+        row_headers = [x[0] for x in mycursor.description]
+        myresult = mycursor.fetchall()
+        
+        data = {
+            'message': "Data retrieved",
+            'rec': myresult,
+            'header': row_headers
+        }
+        return render_template('oproom.html', data=myresult, keyword=keyword, header=row_headers,pagetitle="Operating Room")
+    else:
+        # Render the server template without search results
+        return render_template('oproom.html',pagetitle="Operating Room")
    
 # Error handling for 404
 @app.errorhandler(404)
