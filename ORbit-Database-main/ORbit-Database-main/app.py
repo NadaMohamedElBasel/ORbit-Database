@@ -1,7 +1,7 @@
 from flask import Flask, render_template, request, redirect, url_for, session, flash
 import mysql.connector
 
-app = Flask(__name__)
+app = Flask(name)
 app.config['SECRET_KEY'] = 'mohammed@2023'
 
 # MySQL Database Configuration
@@ -304,6 +304,111 @@ def addpat():
       return render_template('home.html',pagetitle="Home Page")
    else:
       return render_template('addpat.html',pagetitle="Add Patient")
+   
+@app.route('/medicalrec')
+def medicalrec():
+   mycursor.execute("SELECT date,location,ssn,gender,Family_History_of_Diabetes FROM medrec")
+   myresult = mycursor.fetchall()
+   return render_template('medicalrec.html', data=myresult)
+
+@app.route('/addmed',methods = ['POST', 'GET'])
+def addmed():
+    if request.method == 'POST':
+        
+        pssn = request.form['Pssn']
+        gen = request.form['gender']
+        loc = request.form['Location']
+        date = request.form['date']
+            
+        # Family History checkboxes
+        c1 = request.form.get('c1', 'no')
+        c2 = request.form.get('c2', 'no')
+        c3 = request.form.get('c3', 'no')
+        c4 = request.form.get('c4', 'no')
+        c5 = request.form.get('c5', 'no')
+        c6 = request.form.get('c6', 'no')
+            
+            # Patient Medical History checkboxes
+        c7 = request.form.get('c7', 'no')
+        c8 = request.form.get('c8', 'no')
+        c9 = request.form.get('c9', 'no')
+        c10 = request.form.get('c10', 'no')
+        c11 = request.form.get('c11', 'no')
+        c12 = request.form.get('c12', 'no')
+            
+            # Past Surgical History checkboxes
+        c13 = request.form.get('c13', 'no')
+        c14 = request.form.get('c14', 'no')
+        c15 = request.form.get('c15', 'no')
+        c16 = request.form.get('c16', 'no')
+            
+            # Social History checkboxes
+        c17 = request.form.get('c17', 'no')
+        c18 = request.form.get('c18', 'no')
+        c19 = request.form.get('c19', 'no')
+
+            # SQL query to insert into patient_data table
+        sql = """
+        INSERT INTO patient_data (
+            ssn, gender, location, date, 
+            Family_History_of_Diabetes, Family_History_of_Genetic_Disorders, Family_History_of_Heart_Diseases, 
+            Family_History_of_Cancer, Family_History_of_Hypertension, Family_History_of_Autoimmune_Diseases, 
+            Patient_Medical_History_of_Diabetes, Patient_Medical_History_of_Hypertension, 
+            Patient_Medical_History_of_Heart_Disease, Patient_Medical_History_of_post_Stroke, 
+            Patient_Medical_History_of_Allergies, Patient_Medical_History_of_Medications, 
+            Past_Surgical_History_of_Amputation, Past_Surgical_History_of_Transplant, 
+            Past_Surgical_History_of_Cardiovascular_surgery, Past_Surgical_History_of_Fracture_Repair, 
+            Social_History_of_Smoker, Social_History_of_Alcohol_consumer, Social_History_of_addiction
+        ) VALUES (
+            %s, %s, %s, %s, 
+            %s, %s, %s, 
+            %s, %s, %s, 
+            %s, %s, %s, 
+            %s, %s, %s, 
+            %s, %s, %s, 
+            %s, %s, %s, %s
+        )
+            """
+        val = (
+            pssn, gen, loc, date, 
+            c1, c2, c3, 
+            c4, c5, c6, 
+            c7, c8, c9, 
+            c10, c11, c12, 
+            c13, c14, c15, 
+            c16, c17, c18, c19
+            )
+        mycursor.execute(sql, val)
+        mydb.commit() 
+        return render_template('home.html')
+    else:
+        return render_template('addmed.html')
+    
+
+@app.route('/addapp', methods=['POST', 'GET'])
+def addapp():
+    if request.method == 'POST':
+        patient_ssn = request.form['Pssn']
+        doctor_ssn = request.form['Dssn']
+        surgery_type = request.form['specialization']
+        room_number = request.form['roomnum']
+        surgery_date = request.form['surdate']
+
+        sql = "INSERT INTO APPoinment (patient_ssn, doctor_ssn, surgery_type, room_number, surgery_date) VALUES (%s, %s, %s, %s, %s)"
+        val = (patient_ssn, doctor_ssn, surgery_type, room_number, surgery_date)
+        mycursor.execute(sql, val)
+        mydb.commit()
+        return render_template('home.html')
+    else:
+        return render_template('addapp.html')
+    
+@app.route('/surgeryapps', methods=['POST', 'GET'])
+def surgeryapps():
+   return render_template('surgeryapps.html')
+
+
+    
+
 @app.route('/oproom')
 def oproom():
    mycursor.execute("SELECT * FROM operating_room")
@@ -336,5 +441,5 @@ def search_operatingroom():
 def page_not_found(error):
     return render_template('404.html'), 404
 
-if __name__ == '__main__':
+if name == 'main':
     app.run(debug=True)
