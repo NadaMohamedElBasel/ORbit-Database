@@ -443,3 +443,30 @@ def page_not_found(error):
 
 if name == 'main':
     app.run(debug=True)
+data = {
+    "equipment": [12, 19, 3, 5, 2],
+    "doctors": [10, 7, 5, 8, 6],
+    "patients": [65, 59, 80, 81, 56, 55],
+    "operations": [10, 20, 30, 40],
+    "beds": [50, 20, 30, 40]
+}
+
+@app.route('/')
+def dashboard():
+    return render_template('dashboard.html', data=data)
+
+@app.route('/update', methods=['POST'])
+def update_data():
+    global data
+    # Extract data from request
+    data_type = request.form.get('type')
+    new_data = request.form.getlist('data[]')
+    new_data = list(map(int, new_data))
+    
+    # Update the data
+    data[data_type] = new_data
+    
+    return jsonify(success=True)
+
+if __name__ == '__main__':
+    app.run(debug=True)
